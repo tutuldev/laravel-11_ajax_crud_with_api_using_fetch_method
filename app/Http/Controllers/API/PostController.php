@@ -98,7 +98,7 @@ class PostController extends BaseController
             [
                      'title'=>'required',
                      'description'=> 'required',
-                     'image'=>'required|mimes:png,jpg,jpeg,gif',
+                     'image'=>'nullable|image|mimes:png,jpg,jpeg,gif',
                     ]
             );
             if($validateUser->fails()){
@@ -120,7 +120,7 @@ class PostController extends BaseController
             // note: best way to use first method
 
             if($request->image != ''){
-                $path = public_path() . '/uploads';
+                $path = public_path() . '/uploads/';
                 if($postImage[0]->image != '' && $postImage[0]->image != null){
                     $old_file = $path. '/'. $postImage[0]->image;
                     if(file_exists($old_file)){
@@ -132,7 +132,7 @@ class PostController extends BaseController
                 $imageName = time(). '.' . $text;
                 $img->move(public_path(). '/uploads', $imageName);
             }else{
-                $imageName = $postImage->image;
+                $imageName = $postImage[0]->image;
             }
 
 
