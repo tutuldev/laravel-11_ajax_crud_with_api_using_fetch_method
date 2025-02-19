@@ -153,7 +153,7 @@ fetch('/api/posts',{
                                 </td>
                                 <td>
                                     <p>
-                                        <h6>${post.description}</h6></td>
+                                        ${post.description}
 
                                     </p>
                                 </td>
@@ -285,7 +285,7 @@ fetch('/api/posts',{
                 .then(response => response.json())
                 .then(data =>{
                     console.log(data);
-                    // window.location.href = "/allposts"
+                    window.location.href = "/allposts"
                 });
 
                 }
