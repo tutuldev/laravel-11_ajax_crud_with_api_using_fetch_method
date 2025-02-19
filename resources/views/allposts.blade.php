@@ -245,6 +245,51 @@ fetch('/api/posts',{
 
         })
         }
+        // update post and change data
+        var updateform = document.querySelector("#updateform");
+        // add event with asyconus anonymous function
+        updateform.onsubmit = async(e)=>{
+        // form reload of
+        e.preventDefault();
+        // get token
+        const token = localStorage.getItem('api_token');
+        // value set form localStorage
+        const postId = document.querySelector("#postId").value;
+        const title = document.querySelector("#postTitle").value;
+        const description = document.querySelector("#postBody").value;
+
+
+        // data gulo ekta object er modde niye nibo
+        var formData = new FormData();
+        formData.append('id',postId);
+        formData.append('title',title);
+        formData.append('description',description);
+
+          // check image upload or not
+          if(!document.querySelector("#postImage").files[0] ==""){
+            const image = document.querySelector("#postImage").files[0];
+            formData.append('image',image);
+        }
+
+        // data surver a dite hbe
+        // async use kora tai await user korte hobe
+        let response = await fetch(`/api/posts/${postId}`,{
+                method:'POST',
+                body:formData,
+                headers:{
+                  'Authorization': `Bearer ${token}`,
+                //   form data tai upore post use kore niche put method diye overrite kore dite hobe
+                    'X-HTTP-Method-Override':'PUT'
+                }
+            })
+                .then(response => response.json())
+                .then(data =>{
+                    console.log(data);
+                    // window.location.href = "/allposts"
+                });
+
+                }
+
 </script>
 </body>
 </html>
