@@ -161,7 +161,7 @@ fetch('/api/posts',{
                                     <button type="button" class="btn btn-sm btn-primary" data-bs-postid="${post.id}" data-bs-toggle="modal" data-bs-target="#singelPostModel">View</button>
                                 </td>
                                 <td><button type="button" class="btn btn-sm btn-success" data-bs-postid="${post.id}" data-bs-toggle="modal" data-bs-target="#updatePostModel">Update</button></td>
-                                <td><button class="btn btn-sm btn-danger">Delete</button></td>
+                                <td><button onclick="deletePost(${post.id})" class="btn btn-sm btn-danger">Delete</button></td>
                               </tr>`
                             });
 
@@ -288,7 +288,25 @@ fetch('/api/posts',{
                     window.location.href = "/allposts"
                 });
 
+            }
+
+            // delete post
+        async function deletePost(postId){
+                const token = localStorage.getItem('api_token');
+
+                let response = await fetch(`/api/posts/${postId}`,{
+                method:'DELETE',
+                headers:{
+                  'Authorization': `Bearer ${token}`
                 }
+            })
+                .then(response => response.json())
+                .then(data =>{
+                    console.log(data);
+                    window.location.href = "/allposts"
+                });
+
+            }
 
 </script>
 </body>
