@@ -54,7 +54,7 @@
     </div>
 </div>
 
-<!--singel post modal Modal -->
+<!--singel post show modal Modal -->
 <div class="modal fade" id="singelPostModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="singelPostLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -68,6 +68,33 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+
+  {{-- update post modal  --}}
+  <div class="modal fade" id="updatePostModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updatePostLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fs-5" id="updatePostLabel">Update Post</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="updateform">
+            <div class="modal-body">
+                    <input type="hidden" name="" id="postId" class="form-control mb-3" value="">
+                    <b>Title</b> <input type="text" name="" id="postTitle" class="form-control mb-3" value="">
+                    <b>Description</b> <input type="text" name="" id="postBody" class="form-control mb-3" value="">
+                    <img src="" id="showImage" alt="" width="150px" class="mb-3"><br>
+                    <b>Upload Image</b> <input type="file" name="" id="postImage" class="form-control mb-3" value="">
+            </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <input type="submit" value="Save Changes"  class="btn btn-primary">
+
+        </div>
+    </form>
       </div>
     </div>
   </div>
@@ -144,46 +171,80 @@ fetch('/api/posts',{
 });
 
 }
-loadData();
-// open singel post modal
-var singelMOdel = document.querySelector("#singelPostModel");
-if (singelMOdel) {
-    singelMOdel.addEventListener('show.bs.modal', event => {
-    const button = event.relatedTarget
+            loadData();
+            // open singel post modal
+            var singelMOdel = document.querySelector("#singelPostModel");
+            if (singelMOdel) {
+                singelMOdel.addEventListener('show.bs.modal', event => {
+                const button = event.relatedTarget
 
-    const modalBody = document.querySelector("#singelPostModel .modal-body");
-    modalBody.innerHTML = "";
-    
-    const id = button.getAttribute('data-bs-postid')
-    console.log(id);
+                const modalBody = document.querySelector("#singelPostModel .modal-body");
+                modalBody.innerHTML = "";
 
-    const token = localStorage.getItem('api_token');
+                const id = button.getAttribute('data-bs-postid')
+                console.log(id);
 
-fetch(`/api/posts/${id}`,{
-    method:'GET',
-    headers:{
-        'Authorization': `Bearer ${token}`,
-        'Content-type' : 'application/json'
-    }
-})
-.then(response => response.json())
-.then(data =>{
-    const post = data.data.post[0];
+                const token = localStorage.getItem('api_token');
 
-
-    modalBody.innerHTML = `
-        Title: ${post.title}
-        <br>
-        Description: ${post.description}
-        <br>
-        <img widht="150" src="/uploads/${post.image}"/>
-
-    `;
-});
+            fetch(`/api/posts/${id}`,{
+                method:'GET',
+                headers:{
+                    'Authorization': `Bearer ${token}`,
+                    'Content-type' : 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data =>{
+                const post = data.data.post[0];
 
 
-  })
-}
+                modalBody.innerHTML = `
+                    Title: ${post.title}
+                    <br>
+                    Description: ${post.description}
+                    <br>
+                    <img widht="150" src="/uploads/${post.image}"/>
+
+                `;
+            });
+
+
+            })
+            }
+
+        //update post modal
+        var updateModel = document.querySelector("#updatePostModel");
+        if (updateModel) {
+            updateModel.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget
+
+
+            const id = button.getAttribute('data-bs-postid')
+            console.log(id);
+
+            const token = localStorage.getItem('api_token');
+
+        fetch(`/api/posts/${id}`,{
+            method:'GET',
+            headers:{
+                'Authorization': `Bearer ${token}`,
+                'Content-type' : 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data =>{
+            const post = data.data.post[0];
+
+            document.querySelector("#postId").value = post.id;
+            document.querySelector("#postTitle").value = post.title;
+            document.querySelector("#postBody").value = post.description;
+            document.querySelector("#showImage").src = `/uploads/${post.image}`;
+
+        });
+
+
+        })
+        }
 </script>
 </body>
 </html>
